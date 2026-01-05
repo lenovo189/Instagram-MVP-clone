@@ -131,13 +131,13 @@ export default function PostFeedClient({ initialPosts }: { initialPosts: PostWit
     return (
       <div className="max-w-2xl mx-auto mt-20 px-4">
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-          <p className="text-red-800 font-semibold mb-2">{t.home.error}</p>
+          <p className="text-red-800 font-semibold mb-2">{t.common.error}</p>
           <p className="text-red-600 text-sm">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
           >
-            {t.home.tryAgain}
+            {t.common.tryAgain}
           </button>
         </div>
       </div>
