@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 LearnPro
 
-## Getting Started
+LearnPro is a modern, full-stack social networking platform designed for seamless interaction and community building. Built with the latest web technologies, it offers a fast, responsive, and feature-rich experience.
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **📱 Social Feed**: Share your thoughts and images with a dynamic, real-time post feed.
+- **🤝 Friend System**: Connect with others through a robust friend request and management system.
+- **💬 Interactive Posts**: Engage with content through likes and comments.
+- **🔍 User Search**: Easily find and connect with people using the powerful search functionality.
+- **🌍 Multi-language Support**: Fully localized interface supporting English and Qaraqalpaqsha.
+- **👤 Profile Management**: Customize your profile with a bio and profile picture.
+- **🔔 Real-time Notifications**: Stay updated with instant notifications for friend requests and interactions.
+- **🔐 Secure Authentication**: Robust user authentication powered by Supabase, including Google OAuth support.
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Database & Auth**: [Supabase](https://supabase.com/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Internationalization**: [Next-International](https://github.com/QuiiBz/next-international)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18.x or later
+- A Supabase account and project
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/learnpro.git
+   cd learnpro
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables:**
+   Create a `.env.local` file in the root directory and add your Supabase credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📂 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `app/`: Next.js App Router pages and layouts.
+- `components/`: Reusable UI components.
+- `lib/`: Utility functions, Supabase clients, and internationalization logic.
+- `public/`: Static assets like images and icons.
 
-## Learn More
+## 🤝 Contributing
 
-To learn more about Next.js, take a look at the following resources:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

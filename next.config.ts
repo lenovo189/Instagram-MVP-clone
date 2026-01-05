@@ -1,7 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'mnsaifylmkzmpkqerlvz.supabase.co', // Your exact Supabase project hostname
+        pathname: '/storage/v1/object/public/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
+      },
+    ],
+    unoptimized: false, // Keep optimization enabled
+  },
 };
 
 export default nextConfig;
