@@ -20,7 +20,7 @@ export function getDefaultAvatar(size: number = 150): string {
   const bodyY = headY + headRadius + size * 0.03;
   const bodyHeight = size * 0.3;
   const bodyWidth = size * 0.45;
-  
+
   const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
 <defs>
 <style>
@@ -35,9 +35,26 @@ export function getDefaultAvatar(size: number = 150): string {
 <circle cx="${center}" cy="${center}" r="${center}" class="avatar-bg"/>
 <g class="avatar-icon">
 <circle cx="${center}" cy="${headY}" r="${headRadius}"/>
-<ellipse cx="${center}" cy="${bodyY + bodyHeight/2}" rx="${bodyWidth/2}" ry="${bodyHeight/2}"/>
+<ellipse cx="${center}" cy="${bodyY + bodyHeight / 2}" rx="${bodyWidth / 2}" ry="${bodyHeight / 2}"/>
 </g>
 </svg>`;
-  
+
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+/**
+ * Robustly determines the site URL for redirects.
+ * It checks for environment variables and falls back to window.location.origin.
+ */
+export function getURL() {
+  let url =
+    process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your production URL
+    process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel
+    'http://localhost:3000/';
+
+  // Make sure to include `https://` when not localhost.
+  url = url.includes('http') ? url : `https://${url}`;
+  // Make sure to include a trailing `/`.
+  url = url.charAt(url.length - 1) === '/' ? url : `${url}/`;
+
+  return url;
 }
