@@ -125,22 +125,22 @@ export default function PostCard({ post, isFirstPost = false }: { post: PostWith
 
   return (
     <>
-      <div className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+      <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden animate-slide-up hover-lift transition-all duration-300">
         {post.profiles && (
           <div className="flex items-center p-3 sm:p-4">
-            <div className="relative w-10 h-10 flex-shrink-0">
+            <div className="relative w-10 h-10 flex-shrink-0 hover-scale transition-transform">
               <Image
                 src={post.profiles.profile_picture_url || getDefaultAvatar(40)}
                 alt={post.profiles.username || 'User'}
                 fill
-                className="rounded-full object-cover"
+                className="rounded-full object-cover ring-2 ring-primary/20"
                 sizes="40px"
               />
             </div>
-            <p className="ml-3 sm:ml-4 font-semibold text-gray-900 truncate">{post.profiles.username}</p>
+            <p className="ml-3 sm:ml-4 font-semibold text-foreground truncate">{post.profiles.username}</p>
           </div>
         )}
-        <div className="relative w-full aspect-square bg-black">
+        <div className="relative w-full aspect-square bg-black/5">
           {post.media_type === 'image' ? (
             <Image
               src={post.media_url}
@@ -164,7 +164,7 @@ export default function PostCard({ post, isFirstPost = false }: { post: PostWith
           <div className="flex items-center space-x-4">
             <button
               onClick={handleLike}
-              className={`transition-all duration-200 transform active:scale-90 ${isLiked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'
+              className={`transition-all duration-200 transform active-scale hover-scale ${isLiked ? 'text-destructive' : 'text-muted-foreground hover:text-destructive'
                 }`}
             >
               <svg
@@ -184,17 +184,17 @@ export default function PostCard({ post, isFirstPost = false }: { post: PostWith
             </button>
             <button
               onClick={() => setIsCommentModalOpen(true)}
-              className="text-gray-500 hover:text-gray-900 transition-colors duration-200"
+              className="text-muted-foreground hover:text-primary transition-all duration-200 hover-scale active-scale"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
               </svg>
             </button>
           </div>
-          <p className="mt-3 sm:mt-4 font-semibold text-gray-900">{likesCount} {t.post.likes}</p>
+          <p className="mt-3 sm:mt-4 font-semibold text-foreground">{likesCount} {t.post.likes}</p>
           {post.profiles && (
-            <p className="mt-2 text-sm sm:text-base text-gray-700 break-words">
-              <span className="font-semibold text-gray-900">{post.profiles.username}</span> {post.caption}
+            <p className="mt-2 text-sm sm:text-base text-muted-foreground break-words">
+              <span className="font-semibold text-foreground">{post.profiles.username}</span> {post.caption}
             </p>
           )}
           {(post.comments_count || 0) > 0 && (
@@ -202,7 +202,7 @@ export default function PostCard({ post, isFirstPost = false }: { post: PostWith
               {comments.length > 0 ? (
                 <>
                   {comments.slice(0, 2).map((comment) => (
-                    <div key={comment.id} className="flex items-start space-x-2 mb-2">
+                    <div key={comment.id} className="flex items-start space-x-2 mb-2 animate-fade-in">
                       <div className="relative w-6 h-6 flex-shrink-0">
                         <Image
                           src={comment.profiles?.profile_picture_url || getDefaultAvatar(24)}
@@ -212,15 +212,15 @@ export default function PostCard({ post, isFirstPost = false }: { post: PostWith
                           sizes="24px"
                         />
                       </div>
-                      <p className="text-xs sm:text-sm text-gray-700 break-words">
-                        <span className="font-semibold text-gray-900">{comment.profiles?.username}</span> {comment.content}
+                      <p className="text-xs sm:text-sm text-muted-foreground break-words">
+                        <span className="font-semibold text-foreground">{comment.profiles?.username}</span> {comment.content}
                       </p>
                     </div>
                   ))}
                   {(post.comments_count || 0) > 2 && (
                     <button
                       onClick={() => setIsCommentModalOpen(true)}
-                      className="mt-2 text-xs sm:text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors"
+                      className="mt-2 text-xs sm:text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
                     >
                       {t.post.viewAllComments.replace('{count}', (post.comments_count || 0).toString())}
                     </button>
@@ -229,7 +229,7 @@ export default function PostCard({ post, isFirstPost = false }: { post: PostWith
               ) : (
                 <button
                   onClick={() => setIsCommentModalOpen(true)}
-                  className="mt-2 text-xs sm:text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors"
+                  className="mt-2 text-xs sm:text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
                 >
                   {t.post.viewAllComments.replace('{count}', (post.comments_count || 0).toString())}
                 </button>
@@ -243,11 +243,11 @@ export default function PostCard({ post, isFirstPost = false }: { post: PostWith
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder={t.post.addComment}
-              className="flex-1 p-2 text-xs sm:text-sm border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 p-2 text-xs sm:text-sm bg-muted/30 border border-border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all"
             />
             <button
               type="submit"
-              className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-blue-500 rounded-r-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
+              className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-primary rounded-r-lg hover:bg-primary/90 transition-all disabled:opacity-50 active-scale"
               disabled={!newComment.trim()}
             >
               {t.post.post}
