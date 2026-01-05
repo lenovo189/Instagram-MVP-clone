@@ -45,6 +45,32 @@ const KaaFlag = () => (
     </svg>
 );
 
+const UzbFlag = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 250" className="w-5 h-4 shadow-sm">
+        <rect width="500" height="250" fill="#0099B5" />
+        <rect y="85" width="500" height="80" fill="#fff" />
+        <rect y="165" width="500" height="85" fill="#1EB53A" />
+        <rect y="80" width="500" height="5" fill="#CE1126" />
+        <rect y="165" width="500" height="5" fill="#CE1126" />
+        <circle cx="40" cy="40" r="25" fill="#fff" />
+        <circle cx="50" cy="40" r="25" fill="#0099B5" />
+        <g fill="#fff">
+            <circle cx="85" cy="25" r="4" />
+            <circle cx="105" cy="25" r="4" />
+            <circle cx="125" cy="25" r="4" />
+            <circle cx="85" cy="40" r="4" />
+            <circle cx="105" cy="40" r="4" />
+            <circle cx="125" cy="40" r="4" />
+            <circle cx="145" cy="40" r="4" />
+            <circle cx="85" cy="55" r="4" />
+            <circle cx="105" cy="55" r="4" />
+            <circle cx="125" cy="55" r="4" />
+            <circle cx="145" cy="55" r="4" />
+            <circle cx="165" cy="55" r="4" />
+        </g>
+    </svg>
+);
+
 export default function LanguageSwitcher() {
     const { language, setLanguage, t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
@@ -63,6 +89,7 @@ export default function LanguageSwitcher() {
     const languages = [
         { code: 'en' as Language, label: t.common.english, flag: <USFlag /> },
         { code: 'my' as Language, label: t.common.custom, flag: <KaaFlag /> },
+        { code: 'uz' as Language, label: "O'zbekcha", flag: <UzbFlag /> },
     ];
 
     const currentLang = languages.find(l => l.code === language);

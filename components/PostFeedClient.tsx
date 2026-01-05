@@ -29,32 +29,7 @@ export default function PostFeedClient({ initialPosts }: { initialPosts: PostWit
           return;
         }
 
-        // Fetch accepted friendships
-        const { data: friendships, error: friendshipError } = await supabase
-          .from('friendships')
-          .select('requester_id, addressee_id')
-          .eq('status', 'accepted')
-          .or(`requester_id.eq.${user.id},addressee_id.eq.${user.id}`);
-
-        if (friendshipError) {
-          throw new Error('Failed to load friendships');
-        }
-
-        // Get list of friend user IDs
-        const friendIds = new Set<string>();
-        friendIds.add(user.id); // Include own posts
-
-        if (friendships) {
-          friendships.forEach(friendship => {
-            if (friendship.requester_id === user.id) {
-              friendIds.add(friendship.addressee_id);
-            } else {
-              friendIds.add(friendship.requester_id);
-            }
-          });
-        }
-
-        // Fetch posts only from friends (including self)
+        // Fetch all posts
         const { data, error: postsError } = await supabase
           .from('posts')
           .select(`
@@ -64,7 +39,6 @@ export default function PostFeedClient({ initialPosts }: { initialPosts: PostWit
               profile_picture_url
             )
           `)
-          .in('user_id', Array.from(friendIds))
           .order('created_at', { ascending: false });
 
         if (postsError) {

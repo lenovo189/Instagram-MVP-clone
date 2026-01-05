@@ -158,8 +158,88 @@ export const translations = {
             posting: "Jiberilmekte...",
             viewAllComments: "Barlıq {count} pikirdi ko'riw",
         }
+    },
+    uz: {
+        nav: {
+            home: "Bosh sahifa",
+            search: "Qidiruv",
+            notifications: "Bildirishnomalar",
+            profile: "Profil",
+        },
+        common: {
+            language: "Til",
+            english: "Inglizcha",
+            custom: "Qoraqalpoqcha",
+            loading: "Yuklanmoqda...",
+            error: "Xatolik yuz berdi",
+            tryAgain: "Qayta urinish",
+            noResults: "Natija topilmadi",
+            save: "Saqlash",
+            cancel: "Bekor qilish",
+            delete: "O'chirish",
+            accept: "Qabul qilish",
+            decline: "Rad etish",
+        },
+        auth: {
+            signIn: "Kirish",
+            signUp: "Ro'yxatdan o'tish",
+            email: "Email",
+            password: "Parol",
+            username: "Foydalanuvchi nomi",
+            displayName: "Ko'rinadigan ism",
+            profilePicture: "Profil rasmi (Ixtiyoriy)",
+            passwordLength: "Parol kamida 8 ta belgidan iborat bo'lishi kerak.",
+            usernameLength: "Foydalanuvchi nomi 3 va 20 belgi oralig'ida bo'lishi kerak.",
+            googleSignIn: "Google orqali kirish",
+        },
+        home: {
+            welcome: "Xush kelibsiz",
+            createPost: "Post yaratish",
+            noPosts: "Hozircha postlar yo'q",
+            startFollowing: "Boshqa foydalanuvchilarning postlarini ko'rish uchun ularni kuzatishni boshlang!",
+        },
+        notifications: {
+            title: "Bildirishnomalar",
+            noNotifications: "Kutilayotgan do'stlik so'rovlari yo'q",
+            sentRequest: "sizga do'stlik so'rovi yubordi",
+        },
+        search: {
+            placeholder: "Foydalanuvchi nomi yoki ko'rinadigan ism bo'yicha qidirish...",
+            results: "Qidiruv natijalari",
+            suggested: "Tavsiya etilgan foydalanuvchilar",
+            noUsers: "Foydalanuvchilar topilmadi",
+            tryDifferent: "Boshqa foydalanuvchi nomi yoki ko'rinadigan ism bilan qidirib ko'ring.",
+            noSuggested: "Tavsiya etilgan foydalanuvchilar yo'q",
+            checkBack: "Keyinroq qayta tekshirib ko'ring.",
+            friends: "Do'stlar",
+            requestSent: "So'rov yuborildi",
+            respond: "So'rovga javob berish",
+            addFriend: "Do'st qo'shish",
+        },
+        profile: {
+            editProfile: "Profilni tahrirlash",
+            followers: "Kuzatuvchilar",
+            following: "Kuzatilayotganlar",
+            posts: "Postlar",
+            bio: "Men haqimda",
+            noBio: "Ma'lumot yo'q",
+        },
+        post: {
+            likes: "layklar",
+            comments: "fikrlar",
+            noComments: "Hozircha fikrlar yo'q. Birinchi bo'lib fikr qoldiring!",
+            addComment: "Fikr qo'shish...",
+            post: "Yuborish",
+            saving: "Saqlanmoqda...",
+            editProfilePhoto: "Profil rasmini o'zgartirish",
+            createPostTitle: "Yangi post yaratish",
+            dragDrop: "Rasmni bu yerga tashlang yoki tanlang",
+            writeCaption: "Postga sarlavha yozing...",
+            posting: "Yuborilmoqda...",
+            viewAllComments: "Barcha {count} ta fikrni ko'rish",
+        }
     }
 };
 
-export type Language = 'en' | 'my';
+export type Language = 'en' | 'my' | 'uz';
 export type TranslationKeys = typeof translations.en;
