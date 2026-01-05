@@ -13,53 +13,50 @@ export async function middleware(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value;
+        getAll() {
+          return request.cookies.getAll();
         },
-        set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          });
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
           response = NextResponse.next({
             request: {
               headers: request.headers,
             },
           });
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          });
-        },
-        remove(name: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          });
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options)
+          );
         },
       },
     }
   );
 
-  const { data: { user } } = await supabase.auth.getUser();
+  // IMPORTANT: Avoid writing any logic between createServerClient and
+  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
+  // issues with users being randomly logged out.
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const path = request.nextUrl.pathname;
+  console.log(`[Middleware] Path: ${path}, User: ${user?.email || 'None'}`);
 
   const protectedRoutes = ['/home', '/profile', '/search'];
+  const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route));
 
-  if (!user && protectedRoutes.includes(request.nextUrl.pathname)) {
-    return NextResponse.redirect(new URL('/signin', request.url));
+  if (!user && isProtectedRoute) {
+    console.log(`[Middleware] Redirecting unauthenticated user from ${path} to /signin`);
+    const url = new URL('/signin', request.url);
+    url.searchParams.set('next', path);
+    return NextResponse.redirect(url);
+  }
+
+  // If user is logged in and tries to access signin/signup, redirect to home
+  const authRoutes = ['/signin', '/signup'];
+  if (user && authRoutes.includes(path)) {
+    console.log(`[Middleware] Redirecting authenticated user from ${path} to /home`);
+    return NextResponse.redirect(new URL('/home', request.url));
   }
 
   return response;

@@ -9,10 +9,13 @@ export async function GET(request: Request) {
 
     if (code) {
         const supabase = await createClient();
+        console.log('Callback V3: Exchanging code for session...');
         const { error } = await supabase.auth.exchangeCodeForSession(code);
         if (!error) {
+            console.log('Callback: Session exchange successful, redirecting to:', next);
             return NextResponse.redirect(`${origin}${next}`);
         }
+        console.error('Callback: Session exchange error:', error.message);
     }
 
     // return the user to an error page with instructions
