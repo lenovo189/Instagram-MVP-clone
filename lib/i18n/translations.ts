@@ -171,12 +171,12 @@ export const translations = {
         },
         ai: {
             title: "AI Járdemshi",
-            description: "Menden háreqet sorań! Post jazıwda, sorawlarg'a juwap beriwde járdem beremen.",
-            placeholder: "Menen háreqet sorań...",
-            suggestion1: "Man'a kreativ post jazıwda járdem ber",
-            suggestion2: "Sen nege járdem bere alasań?",
-            suggestion3: "Man'a biraz ilham ber",
-            disclaimer: "AI juwaplari hámmawakit durıs bolmaslıǵı mümkin. Muhım maǵlıwmatlardı tekserip kórıń.",
+            description: "Menden háreqet sorań! Post jaziwda, sorawlarg'a juwap beriwde járdem beremen.",
+            placeholder: "Mennen bir soraw soran'",
+            suggestion1: "Ta'biyatti qalay asiraw kerekligin tu'sintirip ber",
+            suggestion2: "Nege Ta'biyatti qorg'aw kerek",
+            suggestion3: "Ne ushin hareket etiwimiz kerek?",
+            disclaimer: "AI juwaplari hardayim durıs bolmawi mumkin. Maǵlıwmatlardı tekserip kórıń.",
         }
     },
     uz: {
