@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { notFound, useParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import EditProfileModal from '@/components/EditProfileModal';
 import PostModal from '@/components/PostModal';
@@ -13,112 +13,103 @@ import { getDefaultAvatar } from '@/lib/utils';
 import { signOut } from '@/app/actions/auth';
 import { useTranslation } from '@/lib/i18n/LanguageContext';
 
-export default function ProfileClientPage() {
+interface ProfileInitialData {
+  profile: Profile;
+  posts: any[];
+  friendshipStatus: string | null;
+  isRequester: boolean;
+  friendCount: number;
+  isOwnProfile: boolean;
+  currentUserId: string | null;
+}
+
+export default function ProfileClientPage({ initialData }: { initialData?: ProfileInitialData }) {
   const params = useParams();
   const username = params.username as string;
 
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [posts, setPosts] = useState<any[]>([]);
-  const [isOwnProfile, setIsOwnProfile] = useState(false);
+  const [profile, setProfile] = useState<Profile | null>(initialData?.profile || null);
+  const [loading, setLoading] = useState(!initialData);
+  const [posts, setPosts] = useState<any[]>(initialData?.posts || []);
+  const [isOwnProfile, setIsOwnProfile] = useState(initialData?.isOwnProfile || false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState<any | null>(null);
-  const [friendshipStatus, setFriendshipStatus] = useState<string | null>(null);
-  const [friendCount, setFriendCount] = useState(0);
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-  const [isRequester, setIsRequester] = useState(false);
+  const [friendshipStatus, setFriendshipStatus] = useState<string | null>(initialData?.friendshipStatus || null);
+  const [friendCount, setFriendCount] = useState(initialData?.friendCount || 0);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(initialData?.currentUserId || null);
+  const [isRequester, setIsRequester] = useState(initialData?.isRequester || false);
   const [showFriendsDropdown, setShowFriendsDropdown] = useState(false);
 
   const supabase = createClient();
   const { t } = useTranslation();
 
   const fetchProfileData = useCallback(async () => {
+    // Only fetch if we don't have initialData or if we need to refresh
+    if (initialData && profile) return;
+
     setLoading(true);
-    const { data: { user: authUser } } = await supabase.auth.getUser();
-    setCurrentUserId(authUser?.id || null);
+    try {
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      setCurrentUserId(authUser?.id || null);
 
-    const { data: profileData, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('username', username)
-      .single();
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('username', username)
+        .single();
 
-    if (error || !profileData) {
-      console.error('Profile not found or error fetching profile:', error);
-      setProfile(null);
-      setLoading(false);
-      return;
-    } else {
+      if (profileError || !profileData) {
+        setProfile(null);
+        setLoading(false);
+        return;
+      }
+
       setProfile(profileData);
       setIsOwnProfile(authUser?.id === profileData.id);
 
-      const { data: postsData } = await supabase
-        .from('posts')
-        .select('*')
-        .eq('user_id', profileData.id)
-        .order('created_at', { ascending: false });
-
-      setPosts(postsData || []);
-
-      const postsWithCounts = await Promise.all(
-        (postsData || []).map(async (post) => {
-          // Count likes for this post
-          const { count: likesCount } = await supabase
-            .from('likes')
-            .select('*', { count: 'exact', head: true })
-            .eq('post_id', post.id);
-
-          // Count comments for this post
-          const { count: commentsCount } = await supabase
-            .from('comments')
-            .select('*', { count: 'exact', head: true })
-            .eq('post_id', post.id);
-
-          // Return post with counts added
-          return {
-            ...post,
-            likes_count: likesCount || 0,
-            comments_count: commentsCount || 0
-          };
-        })
-      );
-      setPosts(postsWithCounts);
-      // Fetch friendship status
-      if (authUser?.id && authUser.id !== profileData.id) {
-        const { data: friendshipData, error: friendshipError } = await supabase
+      const [postsResponse, friendshipResponse, friendCountResponse] = await Promise.all([
+        supabase
+          .from('posts_with_counts')
+          .select('*')
+          .eq('user_id', profileData.id)
+          .order('created_at', { ascending: false }),
+        authUser?.id && authUser.id !== profileData.id
+          ? supabase
+            .from('friendships')
+            .select('status, requester_id')
+            .or(`and(requester_id.eq.${authUser.id},addressee_id.eq.${profileData.id}),and(requester_id.eq.${profileData.id},addressee_id.eq.${authUser.id})`)
+            .maybeSingle()
+          : Promise.resolve({ data: null, error: null }),
+        supabase
           .from('friendships')
-          .select('status, requester_id')
-          .or(`and(requester_id.eq.${authUser.id},addressee_id.eq.${profileData.id}),and(requester_id.eq.${profileData.id},addressee_id.eq.${authUser.id})`)
-          .maybeSingle();
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'accepted')
+          .or(`requester_id.eq.${profileData.id},addressee_id.eq.${profileData.id}`)
+      ]);
 
-        if (!friendshipError && friendshipData) {
-          setFriendshipStatus(friendshipData.status || null);
-          setIsRequester(friendshipData.requester_id === authUser.id);
-        } else {
-          setFriendshipStatus(null);
-          setIsRequester(false);
-        }
+      setPosts(postsResponse.data || []);
+
+      if (friendshipResponse.data) {
+        setFriendshipStatus(friendshipResponse.data.status || null);
+        setIsRequester(friendshipResponse.data.requester_id === authUser?.id);
       } else {
         setFriendshipStatus(null);
         setIsRequester(false);
       }
 
-      const { count } = await supabase
-        .from('friendships')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'accepted')
-        .or(`requester_id.eq.${profileData.id},addressee_id.eq.${profileData.id}`);
-      setFriendCount(count || 0);
+      setFriendCount(friendCountResponse.count || 0);
+    } catch (error) {
+      console.error('Error fetching profile data:', error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  }, [username, supabase]);
+  }, [username, supabase, initialData, profile]);
 
   useEffect(() => {
-    if (username) {
+    if (username && !initialData) {
       fetchProfileData();
     }
-  }, [username, fetchProfileData]);
+  }, [username, fetchProfileData, initialData]);
 
   const handleSendFriendRequest = async () => {
     if (!currentUserId || !profile) return;
@@ -250,7 +241,7 @@ export default function ProfileClientPage() {
 
   return (
     <>
-      <Navbar username={null} />
+      <Navbar username={isOwnProfile ? profile.username : null} />
       <main className="pt-16 pb-8">
         <div className="max-w-4xl mx-auto py-8 px-4">
           <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-8">

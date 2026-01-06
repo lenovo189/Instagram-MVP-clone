@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.7.4",
+    "@google/generative-ai": "^0.24.1",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.89.0",
     "@types/negotiator": "^0.6.4",
@@ -22,6 +23,8 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-dropzone": "^14.3.8",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {

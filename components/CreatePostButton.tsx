@@ -13,7 +13,7 @@ export default function CreatePostButton() {
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed bottom-16 sm:bottom-20 right-4 sm:right-10 bg-blue-500 text-white p-3 sm:p-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 hover:scale-110 active:scale-95 z-40"
+        className="fixed bottom-16 sm:bottom-20 right-4 sm:right-10 bg-primary text-primary-foreground p-3 sm:p-4 rounded-full shadow-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-200 hover:scale-110 active:scale-95 z-40"
         aria-label={t.home.createPost}
       >
         <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

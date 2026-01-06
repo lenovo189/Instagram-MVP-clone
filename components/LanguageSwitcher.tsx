@@ -98,17 +98,17 @@ export default function LanguageSwitcher() {
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center space-x-2 px-3 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-all duration-200 dark:bg-gray-800 dark:hover:bg-gray-700 group"
+                className="flex items-center space-x-2 px-3 py-2 rounded-full bg-muted/50 hover:bg-muted transition-all duration-200 group"
             >
-                <Globe className="w-4 h-4 text-gray-500 group-hover:text-blue-500 transition-colors" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <Globe className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                <span className="text-sm font-medium text-foreground">
                     {currentLang?.label}
                 </span>
-                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-48 rounded-xl bg-white shadow-xl border border-gray-100 py-1 z-50 animate-in fade-in zoom-in duration-200 dark:bg-gray-900 dark:border-gray-800">
+                <div className="absolute right-0 mt-2 w-48 rounded-xl bg-card shadow-xl border border-border py-1 z-50 animate-in fade-in zoom-in duration-200">
                     {languages.map((lang) => (
                         <button
                             key={lang.code}
@@ -116,13 +116,13 @@ export default function LanguageSwitcher() {
                                 setLanguage(lang.code);
                                 setIsOpen(false);
                             }}
-                            className="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-blue-400"
+                            className="w-full flex items-center justify-between px-4 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary transition-colors"
                         >
                             <div className="flex items-center space-x-3">
                                 <span>{lang.flag}</span>
                                 <span className={language === lang.code ? 'font-semibold' : ''}>{lang.label}</span>
                             </div>
-                            {language === lang.code && <Check className="w-4 h-4 text-blue-500" />}
+                            {language === lang.code && <Check className="w-4 h-4 text-primary" />}
                         </button>
                     ))}
                 </div>

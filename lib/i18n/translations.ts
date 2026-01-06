@@ -3,6 +3,7 @@ export const translations = {
         nav: {
             home: "Home",
             search: "Search",
+            ai: "AI",
             notifications: "Notifications",
             profile: "Profile",
         },
@@ -77,12 +78,22 @@ export const translations = {
             writeCaption: "Postqa title jazın'...",
             posting: "Posting...",
             viewAllComments: "View all {count} comments",
+        },
+        ai: {
+            title: "AI Assistant",
+            description: "Ask me anything! I can help you write posts, answer questions, and more.",
+            placeholder: "Ask me anything...",
+            suggestion1: "Help me write a creative post",
+            suggestion2: "What can you help me with?",
+            suggestion3: "Give me some inspiration",
+            disclaimer: "AI responses may not always be accurate. Please verify important information.",
         }
     },
     my: {
         nav: {
             home: "Bas bet",
             search: "Izlew",
+            ai: "AI",
             notifications: "Bildirmeler",
             profile: "Profil",
         },
@@ -157,12 +168,22 @@ export const translations = {
             writeCaption: "Postqa title jazın'...",
             posting: "Jiberilmekte...",
             viewAllComments: "Barlıq {count} pikirdi ko'riw",
+        },
+        ai: {
+            title: "AI Járdemshi",
+            description: "Menden háreqet sorań! Post jazıwda, sorawlarg'a juwap beriwde járdem beremen.",
+            placeholder: "Menen háreqet sorań...",
+            suggestion1: "Man'a kreativ post jazıwda járdem ber",
+            suggestion2: "Sen nege járdem bere alasań?",
+            suggestion3: "Man'a biraz ilham ber",
+            disclaimer: "AI juwaplari hámmawakit durıs bolmaslıǵı mümkin. Muhım maǵlıwmatlardı tekserip kórıń.",
         }
     },
     uz: {
         nav: {
             home: "Bosh sahifa",
             search: "Qidiruv",
+            ai: "AI",
             notifications: "Bildirishnomalar",
             profile: "Profil",
         },
@@ -237,6 +258,15 @@ export const translations = {
             writeCaption: "Postga sarlavha yozing...",
             posting: "Yuborilmoqda...",
             viewAllComments: "Barcha {count} ta fikrni ko'rish",
+        },
+        ai: {
+            title: "AI Yordamchi",
+            description: "Mendan so'rang! Post yozishda, savollarga javob berishda yordam beraman.",
+            placeholder: "Mendan istalgan narsani so'rang...",
+            suggestion1: "Kreativ post yozishda yordam ber",
+            suggestion2: "Sen nima bilan yordam bera olasan?",
+            suggestion3: "Menga ilhom ber",
+            disclaimer: "AI javoblari har doim to'g'ri bo'lmasligi mumkin. Muhim ma'lumotlarni tekshirib ko'ring.",
         }
     }
 };

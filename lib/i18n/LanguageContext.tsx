@@ -9,7 +9,11 @@ interface LanguageContextType {
     t: TranslationKeys;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType>({
+    language: 'en',
+    setLanguage: () => { },
+    t: translations['en']
+});
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     const [language, setLanguageState] = useState<Language>('en');
@@ -37,8 +41,5 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
 export const useTranslation = () => {
     const context = useContext(LanguageContext);
-    if (context === undefined) {
-        throw new Error('useTranslation must be used within a LanguageProvider');
-    }
     return context;
 };

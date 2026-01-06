@@ -15,87 +15,8 @@ export default function PostFeedClient({ initialPosts }: { initialPosts: PostWit
   const supabase = createClient();
   const { t } = useTranslation();
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-
-        if (!user) {
-          setPosts([]);
-          setLoading(false);
-          return;
-        }
-
-        // Fetch all posts
-        const { data, error: postsError } = await supabase
-          .from('posts')
-          .select(`
-            *,
-            profiles (
-              username,
-              profile_picture_url
-            )
-          `)
-          .order('created_at', { ascending: false });
-
-        if (postsError) {
-          throw new Error('Failed to load posts');
-        }
-
-        const postsData = (data || []) as PostWithProfile[];
-
-        // Fetch likes and comments counts in batch for all posts
-        if (postsData.length > 0) {
-          const postIds = postsData.map(p => p.id);
-
-          // Fetch likes counts
-          const { data: likesData } = await supabase
-            .from('likes')
-            .select('post_id')
-            .in('post_id', postIds);
-
-          // Fetch comments counts
-          const { data: commentsData } = await supabase
-            .from('comments')
-            .select('post_id')
-            .in('post_id', postIds);
-
-          // Create maps for quick lookup
-          const likesCountMap = new Map<string, number>();
-          const commentsCountMap = new Map<string, number>();
-
-          likesData?.forEach(like => {
-            likesCountMap.set(like.post_id, (likesCountMap.get(like.post_id) || 0) + 1);
-          });
-
-          commentsData?.forEach(comment => {
-            commentsCountMap.set(comment.post_id, (commentsCountMap.get(comment.post_id) || 0) + 1);
-          });
-
-          // Add counts to posts
-          const postsWithCounts = postsData.map(post => ({
-            ...post,
-            likes_count: likesCountMap.get(post.id) || 0,
-            comments_count: commentsCountMap.get(post.id) || 0,
-          }));
-
-          setPosts(postsWithCounts);
-        } else {
-          setPosts(postsData);
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Something went wrong');
-        console.error('Error fetching posts:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPosts();
-  }, [supabase]);
+  // No need to refetch on mount if initialPosts are provided
+  // Real-time updates or manual refresh can be handled separately if needed
 
   if (loading && posts.length === 0) {
     return <PostFeedSkeleton />;

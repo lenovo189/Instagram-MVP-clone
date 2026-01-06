@@ -91,6 +91,9 @@ export default function Navbar({ username }: { username: string | null }) {
               <a href="/search" className="px-2 lg:px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-primary/10 hover-lift transition-all">
                 {t.nav.search}
               </a>
+              <a href="/ai" className="px-2 lg:px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-primary/10 hover-lift transition-all">
+                {t.nav.ai || 'AI'}
+              </a>
 
               <Link href="/notifications" className="relative px-2 lg:px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-primary/10 hover-lift transition-all">
                 {t.nav.notifications}

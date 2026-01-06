@@ -116,99 +116,110 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
   if (!isOpen || !post) return null;
 
   return (
+    /* FULLY OPAQUE OVERLAY */
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-white"
       onClick={onClose}
     >
+      {/* FULLY OPAQUE MODAL */}
       <div
-        className="bg-white rounded-lg shadow-lg w-full max-w-4xl h-full md:h-auto md:max-h-[90vh] flex flex-col md:flex-row animate-in zoom-in-95 duration-200"
+        className="w-full max-w-4xl h-full md:h-auto md:max-h-[90vh] flex flex-col md:flex-row bg-white border border-gray-200"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="relative w-full md:w-1/2 h-64 md:h-auto bg-black flex-shrink-0">
+        {/* MEDIA */}
+        <div className="relative w-full md:w-1/2 h-64 md:h-auto bg-white border-r border-gray-200">
           {post.media_type === 'image' ? (
             <Image
               src={post.media_url}
               alt="Post media"
               fill
-              className="object-contain"
-              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-contain bg-white"
             />
           ) : (
-            <video src={post.media_url} controls className="object-contain w-full h-full"></video>
+            <video
+              src={post.media_url}
+              controls
+              className="w-full h-full object-contain bg-white"
+            />
           )}
         </div>
-        <div className="w-full md:w-1/2 flex flex-col">
-          <div className="flex items-center justify-between p-4 border-b">
-            <button onClick={onClose} className="text-gray-500 hover:text-gray-900 ml-auto">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+
+        {/* CONTENT */}
+        <div className="flex flex-col w-full md:w-1/2 bg-white">
+          {/* HEADER */}
+          <div className="p-4 border-b border-gray-200 bg-white">
+            <button
+              onClick={onClose}
+              className="ml-auto block text-gray-500 hover:text-black"
+            >
+              ✕
             </button>
           </div>
-          <div className="grow p-4 overflow-y-auto">
-            <div className="flex items-center space-x-4 mb-4">
-              <p className="font-semibold">{post.caption}</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={handleLike}
-                className={`transition-all duration-200 transform active:scale-90 ${isLiked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'
-                  }`}
-              >
-                <svg
-                  className={`w-6 h-6 transition-all duration-200 ${isLiked ? 'scale-110' : ''}`}
-                  fill={isLiked ? 'currentColor' : 'none'}
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                </svg>
-              </button>
-            </div>
-            <p className="mt-2 font-semibold text-gray-900">{likesCount} {t.post.likes}</p>
-            <div className="mt-4 space-y-4">
+
+          {/* BODY */}
+          <div className="flex-1 p-4 overflow-y-auto bg-white">
+            <p className="text-sm text-black mb-4">
+              {post.caption}
+            </p>
+
+            <button
+              onClick={handleLike}
+              className={isLiked ? 'text-red-600' : 'text-gray-500'}
+            >
+              ♥
+            </button>
+
+            <p className="text-sm text-gray-700 mt-2">
+              {likesCount} {t.post.likes}
+            </p>
+
+            <div className="mt-6 space-y-4">
               {comments.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <p>{t.post.noComments}</p>
-                </div>
+                <p className="text-sm text-gray-500 text-center">
+                  {t.post.noComments}
+                </p>
               ) : (
-                comments.map((comment) => (
-                  <div key={comment.id} className="flex items-start space-x-2 mb-4">
-                    {comment.profiles && (
-                      <>
-                        <div className="relative w-8 h-8 flex-shrink-0">
-                          <Image
-                            src={comment.profiles.profile_picture_url || getDefaultAvatar(32)}
-                            alt={comment.profiles.username || 'User'}
-                            fill
-                            className="rounded-full object-cover"
-                            sizes="32px"
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm break-words">
-                            <span className="font-semibold">{comment.profiles.username}</span> {comment.content}
-                          </p>
-                          <p className="text-xs text-gray-500 mt-1">{new Date(comment.created_at).toLocaleString()}</p>
-                        </div>
-                      </>
-                    )}
+                comments.map(c => (
+                  <div key={c.id} className="flex gap-2 bg-white">
+                    <Image
+                      src={c.profiles?.profile_picture_url || getDefaultAvatar(32)}
+                      alt="avatar"
+                      width={32}
+                      height={32}
+                      className="rounded-full"
+                    />
+                    <div>
+                      <p className="text-sm text-black">
+                        <span className="font-medium">
+                          {c.profiles?.username}
+                        </span>{' '}
+                        {c.content}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(c.created_at).toLocaleString()}
+                      </p>
+                    </div>
                   </div>
                 ))
               )}
             </div>
           </div>
-          <form onSubmit={handleCommentSubmit} className="flex items-center p-3 sm:p-4 border-t">
+
+          {/* INPUT */}
+          <form
+            onSubmit={handleCommentSubmit}
+            className="p-3 border-t border-gray-200 flex gap-2 bg-white"
+          >
             <input
-              type="text"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder={t.post.addComment}
-              className="flex-1 p-2 text-sm border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 p-2 text-sm border border-gray-300 bg-white text-black focus:outline-none"
             />
             <button
               type="submit"
-              className="px-3 sm:px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-r-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
               disabled={!newComment.trim()}
+              className="px-4 py-2 text-sm bg-black text-white disabled:opacity-40"
             >
               {t.post.post}
             </button>
